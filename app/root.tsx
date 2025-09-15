@@ -42,6 +42,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: 'devport' },
+    { name: 'description', content: 'Welcome to devport!' },
+  ];
+}
+
 export default function App() {
   return <Outlet />;
 }
