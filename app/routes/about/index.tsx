@@ -1,9 +1,9 @@
 
 
 const AboutPage = () => {
-    return (<div className="">
+    return (<>
         <h1 className="">about</h1>
-    </div> );
+    </> );
 }
  
 export default AboutPage;

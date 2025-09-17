@@ -14,7 +14,7 @@ console.log('Home');
 export default function Home() {
   return (
     <section className=''>
-      <Hero />
+  
     </section>
   );
 }
