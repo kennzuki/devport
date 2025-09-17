@@ -7,7 +7,7 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "server": "json-server --watch data/db.json --port 3000"
+    "server": "json-server --watch data/db.json --port 8000"
   },
   "dependencies": {
     "@react-router/node": "^7.7.1",
