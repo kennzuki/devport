@@ -1,7 +1,8 @@
-import type { ComponentProps } from "react";
-import type { Route } from "./+types/index";
 
-export async function loader({request}: Route.LoaderArgs):Promise<any> {
+import type { Route } from "./+types/index";
+import type { Projects } from "~/types";
+
+export async function loader({request}: Route.LoaderArgs):Promise < {projects: Projects[]} > {
   const res = await fetch('https://localhost:8000/projects')
   const data= await res.json()
   return {projects:data}
@@ -10,7 +11,7 @@ export async function loader({request}: Route.LoaderArgs):Promise<any> {
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
   
-  const { projects } = loaderData
+  const { projects } = loaderData as { projects: Projects[] };
   console.log(projects);
   
   return (
