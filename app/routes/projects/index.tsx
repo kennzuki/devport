@@ -3,6 +3,14 @@ import type { Route } from './+types/index';
 import type { Project } from '~/types';
 import ProjectCard from '~/components/ProjectCard';
 import Pagination from '~/components/Pagination';
+import { AnimatePresence, motion } from 'framer-motion';
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: 'devport | projects' },
+    { name: 'description', content: 'My website projects' },
+  ];
+}
 
 export async function loader({
   request,
@@ -13,26 +21,69 @@ export async function loader({
 }
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
-  const { projects } = loaderData as {projects:Project[]};
-
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
-  const projectsPerPage = 2;
-  const totalPages = Math.ceil(projects.length / projectsPerPage);
+  const { projects } = loaderData as { projects: Project[] };
+  const projectsPerPage = 4;
 
+  const categories = [
+    'All',
+    ...new Set(projects.map((project) => project.category)),
+  ];
+
+  // Filter project based on the category
+  const filteredProjects =
+    selectedCategory === 'All'
+      ? projects
+      : projects.filter((project) => project.category === selectedCategory);
+
+  const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
   const indexOfLastPage = currentPage * projectsPerPage;
   const indexOfFirstPage = indexOfLastPage - projectsPerPage;
-  const currentProjects = projects.slice(indexOfFirstPage, indexOfLastPage);
+  const currentProjects = filteredProjects.slice(
+    indexOfFirstPage,
+    indexOfLastPage
+  );
 
- 
   return (
     <>
       <h1 className='text-2xl uppercase font-bold '>projects</h1>
-      <div className='grid grid-cols-3 gap-4 sm:grid-cols-2 mb-6'>
-        {currentProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+      <div className='flex flex-wrap gap-2 my-8'>
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => {
+              setSelectedCategory(category);
+              setCurrentPage(1);
+            }}
+            className={`px-3 py-1 rounded text-sm cursor-pointer ${
+              selectedCategory === category
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-700 text-gray-200'
+            }`}
+          >
+            {category}
+          </button>
         ))}
       </div>
-     <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
+
+      <AnimatePresence mode='wait'>
+         <motion.div layout className='grid grid-cols-3 gap-4 sm:grid-cols-2 mb-6'>
+          {currentProjects.map((project) => (
+            <motion.div layout key={project.id}>
+          <ProjectCard project={project} />
+          </motion.div>
+         
+        ))}
+      </motion.div>
+      </AnimatePresence>
+
+     
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
     </>
   );
 };
