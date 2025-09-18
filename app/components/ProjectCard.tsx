@@ -11,7 +11,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <p>{project.description}</p>
             <div className="flex justify-between items-center">
               <span className="">{project.category}</span>
-              <span className="">{new Date(project.date).toLocaleDateString()}</span>
+              <span className="text-sm">{new Date(project.date).toLocaleDateString()}</span>
             </div>
            
           </div>
