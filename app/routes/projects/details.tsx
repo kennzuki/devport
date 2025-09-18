@@ -23,7 +23,7 @@ export function HydrateFallback() {
 
 const ProjectDetailsPage = ({ loaderData }: Route.ComponentProps) => {
   const project = loaderData;
-  console.log(project);
+  
 
   return (
       <>
