@@ -1,7 +1,6 @@
-import { log } from 'console';
-import type { Route } from '../+types/home/index';
-
-import Hero from '~/components/Hero';
+import type { Project } from '~/types';
+import type { Route } from './+types/index';
+import Featured from '~/components/Featured';
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,11 +9,20 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export async function loader({request}:Route.LoaderArgs):Promise<{projects:Project[]}>  {
+  const res=await fetch(`${import.meta.env.VITE_API_URL}/projects`);
+  const data=await res.json();
+  return {projects:data}
+}
 
-export default function Home() {
+const HomePage=({loaderData}:Route.ComponentProps)=> {
+  const{projects}=loaderData
+  
   return (
     <section className=''>
-  
+      <Featured projects={projects} count={2} />
     </section>
   );
 }
+
+export default HomePage
