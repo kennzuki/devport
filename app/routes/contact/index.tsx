@@ -1,29 +1,25 @@
 import { Form } from 'react-router';
 import type { Route } from './+types/index';
 
-
 export async function action({ request }: Route.ActionArgs) {
-    const formData = await request.formData();
-    const name = formData.get("name");
-    const subject = formData.get("subject");
-    const message = formData.get("message");
-    const email = formData.get("email");
-    const data = [
-        name,
-        subject,
-        message,
-        email
-    ]
-    return{message:'message sent successfully', data}
+  const formData = await request.formData();
+  const name = formData.get('name');
+  const subject = formData.get('subject');
+  const message = formData.get('message');
+  const email = formData.get('email');
+  const data = [name, subject, message, email];
+  return { message: 'message sent successfully', data };
 }
 
-const ContactPage = ({actionData}:Route.componentProps) => {
+const ContactPage = ({ actionData }: Route.ComponentProps) => {
   return (
     <div className='max-w-3xl mx-auto mt-12 px-6 py-8 bg-gray-900'>
       <h2 className='text-3xl font-bold text-white mb-8 text-center'>
         📬 Contact Me
       </h2>
-{actionData?.message?(<p className='text-green-500 text-center'>{actionData.message}</p>):null}
+      {actionData?.message ? (
+        <p className='text-green-500 text-center'>{actionData.message}</p>
+      ) : null}
       <Form method='post' className='space-y-6'>
         <div>
           <label
