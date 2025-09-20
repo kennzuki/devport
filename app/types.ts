@@ -13,8 +13,8 @@ export type PostMeta = {
   id: string;
   slug: string;
   title: string;
+  body: string;
   excerpt: string;
-    date: string;
+  date: string;
   image: string;
-
 };
