@@ -9,7 +9,7 @@ import PostFilter from '~/components/PostFilter';
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<{ posts: PostMeta[] }> {
-  const url = new URL('posts-meta.json', request.url);
+  const url = new URL('/public/posts-meta.json', request.url);
   const res = await fetch(url);
   if (!res.ok) throw new Error('something went wrong');
   const data = await res.json();

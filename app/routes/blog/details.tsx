@@ -5,14 +5,16 @@ import { Link } from 'react-router';
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { slug} = params;
-  console.log(slug);
-  const url = new URL('/posts-meta.json', request.url);
+  
+  const url = new URL('/posts-meta.json', request.url); 
   const res = await fetch(url);
   if (!res.ok) throw new Error('something went wrong');
   const data = await res.json();
   const postMeta = data.find((post: PostMeta) => post.slug=== slug);
   if (!postMeta) throw new Error('post not found');
-  const markdown = await import(`../posts/${slug}.md?raw`);
+   const posts = import.meta.glob('../posts/*.md?raw', { query: '?query', eager: true });
+  const fileKey = `../posts/${slug}.md?raw`;
+  const markdown = posts[fileKey];
 
   return {
     postMeta,
@@ -35,7 +37,7 @@ const BlogDetailsPage = ({ loaderData }: BlogDetailsPageProps) => {
         {new Date(postMeta.date).toDateString()}
       </p>
 
-      <div className='prose prose-invert max-w-none mb-12'>
+      <div className=' max-w-none mb-12'>
         <ReactMarkdown>{markdown}</ReactMarkdown>
       </div>
 
