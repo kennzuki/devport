@@ -1,5 +1,6 @@
 export type Project = {
   id: string;
+  documentId: string;
   title: string;
   description: string;
   image: string;
@@ -20,11 +21,8 @@ export type PostMeta = {
 };
 
 export type StrapiResponse<T> = {
-  data:
-  [
-
-  ]
-}
+  data: [];
+};
 
 export type StrapiProject = {
   id: string;
@@ -37,8 +35,8 @@ export type StrapiProject = {
       small?: { url: string };
       medium?: { url: string };
       large?: { url: string };
-    }
-  }
+    };
+  };
   url: string;
   date: string;
   category: string;

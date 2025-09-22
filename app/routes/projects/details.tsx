@@ -1,39 +1,52 @@
 import type { Route } from './+types/details';
-import type { Project } from '~/types';
+import type { Project, StrapiProject, StrapiResponse } from '~/types';
+
 import { FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router';
 
 export async function clientLoader({
   request,
   params,
-}: Route.ClientLoaderArgs): Promise< Project > {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects/${params.id}`);
-  if (!res.ok) throw new Error('something went wrong');
-  const project:Project = await res.json();
-  return  project
-}
+}: Route.ClientLoaderArgs): Promise<Project> {
+  const { id } = params;
 
-export function HydrateFallback() {
-  return (
-    <div>
-      <h1>Loading...</h1>
-    </div>
+  const res = await fetch(
+    `${
+      import.meta.env.VITE_API_URL
+    }/projects?filters[documentId][$eq]=${id}&populate=*`
   );
+  if (!res.ok) throw new Error('something went wrong');
+  const json: StrapiResponse<StrapiProject> = await res.json();
+
+  const item = json.data[0];
+
+  const project: Project = {
+    id: item.id,
+    documentId: item.documentId,
+    title: item.title,
+    description: item.description,
+    image: item.image?.url ? `${item.image.url}` : '/images/no-image.png',
+    url: item.url,
+    date: item.date,
+    category: item.category,
+    featured: item.featured,
+  };
+
+  return { project };
 }
 
 const ProjectDetailsPage = ({ loaderData }: Route.ComponentProps) => {
-  const project = loaderData;
-  
+  const { project } = loaderData;
 
   return (
-      <>
-           <Link
+    <>
+      <Link
         to='/projects'
         className='flex items-center text-blue-400 hover:text-blue-500 mb-6 transition'
       >
         <FaArrowLeft className='mr-2' /> Back To Projects
       </Link>
-     <div className='grid gap-8 md:grid-cols-2 items-start'>
+      <div className='grid gap-8 md:grid-cols-2 items-start'>
         <div>
           <img
             src={project.image}
