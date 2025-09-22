@@ -8,7 +8,8 @@ type FeaturedPageProps = {
 
 const Featured: React.FC<FeaturedPageProps> = ({ projects, count }) => {
 
-    const featured=projects.filter((p) => p.featured).slice(0,count);
+   if(projects.length) return null;
+    const featured = projects.filter((project) => project.featured === true).slice(0, count);
     return (
         <section>
         <h1 className="text-xl font-bold">Featured Projects</h1>
